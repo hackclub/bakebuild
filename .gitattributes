@@ -1,0 +1,22 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# JS files should use LF
+*.js text eol=lf
+
+# CSS files should use LF
+*.css text eol=lf
+
+# HTML files should use LF
+*.html text eol=lf
+
+# Documents
+*.md text
+*.txt text
+
+# Graphics
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.svg text

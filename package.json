@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "api/submit-email.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "airtable": "^0.12.2",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

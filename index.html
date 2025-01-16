@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BakeBuild - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="cookie-border-left"></div>
+    <div class="cookie-border-right"></div>
+
+    <header class="secondary-header">
+        <img src="images/bakebuild-logo.png" alt="BakeBuild Logo" class="logo" loading="lazy" />
+        <p class="subtagline">DESIGN A COOKIE CUTTER, GET IT SHIPPED!</p>
+        <p class="hackclub">A Hack Club YSWS</p>
+        <a href="https://hackclub.com" target="_blank" class="hackclub-logo">
+            <img src="https://assets.hackclub.com/flag-orpheus-top.svg" alt="Hack Club Logo" />
+        </a>
+    </header>
+
+    <div class="content-container">
+        <div class="table-container">
+            <section id="rsvp" class="notification-section">
+                <h2>RSVP Here for Future Updates!</h2>
+                <form id="notifyForm" class="notify-form">
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+                    <button type="submit" class="share-button">RSVP</button>
+                </form>
+                <p id="feedbackMessage" class="feedback-message"></p>
+            </section>
+
+            <div class="button-row">
+                <button class="cta-button"
+                    onclick="window.location.href='https://airtable.com/apphIjW8QTCISm6tv/pagbs9wcZpDTyQ8cZ/form'">
+                    SUBMIT YOUR FILE
+                </button>
+                <a href="faq.html" class="cta-button-link">
+                    <button class="cta-button">FAQs</button>
+                </a>
+                <a href="https://twitter.com/intent/tweet?text=Teens!%20Get%20creative%20with%20BakeBuild%20and%20design%20your%20own%20cookie%20cutter!%20Exclusively%20for%20teen%20makers%20🚀🍪%20https://bakebuild.hackclub.com/%20%23bakebuild%20%23hackclub%20@hackclub"
+                    class="cta-button-link">
+                    <button class="cta-button">SHARE ON X</button>
+                </a>
+            </div>
+        </div>
+        <section id="get-started">
+            <h1>HOW TO GET STARTED!</h1>
+            <ol class="numbered-list">
+                <li>
+                    <h2>Draft your idea</h2>
+                    <p>Decide on the cookie cutter shape. Sketch your idea on a piece of paper or use digital tools.</p>
+                </li>
+                <li>
+                    <h2>Design it in CAD</h2>
+                    <p>Follow the step-by-step guide provided <a href="pdf/How%20to%20Make%20a%20Cookie%20Cutter.pdf"
+                            target="_blank">HERE</a> to create your cookie cutter using Onshape.</p>
+                </li>
+                <li>
+                    <h2><a href="https://airtable.com/apphIjW8QTCISm6tv/pagbs9wcZpDTyQ8cZ/form">Submit it!</a></h2>
+                    <p
+                        style="font-family: 'Fredoka One', sans-serif; color: #4f2f2f; margin-top: 10px; text-align: center; line-height: 1.5;">
+                        <span style="color: #ff7043; font-size: 1.5em;">⚠️</span>
+                        <strong>NOTE:</strong> Program is running until <strong>February 11, 2025, 11:59 PM
+                            EST</strong>, get your cookies while you can!
+                    </p>
+                </li>
+            </ol>
+        </section>
+
+        <section id="requirements">
+            <h1>Requirements</h1>
+            <ul class="requirements-list">
+                <li>File format: .step.</li>
+                <li>Dimensions: ≤ 100mm x 100mm.</li>
+                <li>Must be compatible with <a href="https://jlcpcb.com" target="_blank">JLCPCB</a>.</li>
+                <li>Your design must be unique and created by you.</li>
+                <li>Include a wall and border for proper functionality.</li>
+            </ul>
+        </section>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+<footer>
+    <p>Website was designed by Kate and made by Kayla and DevIos.</p>
+</footer>
+
+</html>
