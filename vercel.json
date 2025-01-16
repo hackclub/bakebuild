@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "project": {
-    "rootDirectory": "website"
-  },
   "builds": [
     {
       "src": "api/submit-email.js",
