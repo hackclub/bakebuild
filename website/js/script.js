@@ -64,4 +64,40 @@ document.addEventListener("DOMContentLoaded", () => {
             button.textContent = "RSVP";
         }
     }
+
+    const shareButton = document.getElementById("shareButton");
+    const fallbackContainer = document.getElementById("fallbackShare");
+
+    const shareTitle = "BakeBuild - Design Your Own Cookie Cutter";
+    const shareText = "Teens! Get creative with BakeBuild and design your own cookie cutter! 🚀🍪";
+    const shareURL = "https://bakebuild.hackclub.com/";
+
+    if (navigator.share) {
+        shareButton.addEventListener("click", () => {
+            navigator.share({
+                title: shareTitle,
+                text: shareText,
+                url: shareURL
+            }).catch((error) => console.error("Error sharing:", error));
+        });
+    } else {
+
+        shareButton.style.display = "none";
+        fallbackContainer.style.display = "block";
+
+        const copyButton = document.getElementById("copyLinkButton");
+        const copyMessage = document.getElementById("copyMessage");
+
+        copyButton.addEventListener("click", () => {
+            navigator.clipboard.writeText(shareURL)
+                .then(() => {
+                    copyMessage.textContent = "🔗 Link copied!";
+                    copyMessage.style.opacity = "1";
+                    setTimeout(() => {
+                        copyMessage.style.opacity = "0";
+                    }, 3000);
+                })
+                .catch((err) => console.error("Error copying link:", err));
+        });
+    }
 });
