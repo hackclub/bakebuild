@@ -497,6 +497,14 @@ footer {
     border-radius: 10px;
 }
 
+#fallbackShare {
+    margin-top: 10px;
+}
+
+#copyMessage {
+    transition: opacity 0.3s ease-in-out;
+}
+
 .other-questions {
     text-align: center;
     font-size: 1.5em;

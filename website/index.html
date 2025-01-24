@@ -42,10 +42,13 @@
                 <a href="faq.html" class="cta-button-link">
                     <button class="cta-button">FAQs</button>
                 </a>
-                <a href="https://twitter.com/intent/tweet?text=Teens!%20Get%20creative%20with%20BakeBuild%20and%20design%20your%20own%20cookie%20cutter!%20Exclusively%20for%20teen%20makers%20🚀🍪%20https://bakebuild.hackclub.com/%20%23bakebuild%20%23hackclub%20@hackclub"
-                    class="cta-button-link">
-                    <button class="cta-button">SHARE ON X</button>
-                </a>
+                <div id="shareContainer">
+                    <button id="shareButton" class="cta-button">SHARE</button>
+                </div>
+                <div id="fallbackShare" style="display: none; text-align: center;">
+                    <button id="copyLinkButton" class="cta-button">COPY LINK</button>
+                    <p id="copyMessage" style="color: green; font-weight: bold; margin-top: 5px; opacity: 0;">🔗 Link copied!</p>
+                </div>                           
             </div>
         </div>
         <section id="get-started">
