@@ -16,12 +16,7 @@ website/dist/
 website/.vercel
 
 # Environment files
-website/.env
-website/.env.local
-website/.env.development.local
-website/.env.test.local
-website/.env.production.local
-
+*/.env
 # Logs
 logs
 *.log
