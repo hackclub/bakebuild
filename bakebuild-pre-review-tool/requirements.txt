@@ -1,0 +1,4 @@
+python-dotenv
+requests
+openpyxl
+build123d
