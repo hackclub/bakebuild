@@ -7,6 +7,8 @@ from openpyxl import Workbook
 from openpyxl.styles import PatternFill
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed, TimeoutError
 import multiprocessing
+from collections import defaultdict
+from threading import Lock
 
 load_dotenv()
 
@@ -64,11 +66,13 @@ def fetch_airtable_table(table_id):
         params["offset"] = offset
     return records
 
+
 def _parse_step_file(path: str):
     from build123d import import_step
     shape = import_step(path)
     bb = shape.bounding_box()
     return (float(bb.size.X), float(bb.size.Y), float(bb.size.Z))
+
 
 def safe_step_dimensions(filepath, timeout=30):
     future = STEP_POOL.submit(_parse_step_file, str(filepath))
@@ -81,7 +85,15 @@ def safe_step_dimensions(filepath, timeout=30):
         raise RuntimeError(f"STEP parsing failed: {e}")
 
 
-def download_worker(rec, workshop_map, dup_names, dup_addresses):
+def download_worker(
+    rec,
+    workshop_map,
+    dup_names,
+    dup_addresses,
+    submitted_count_by_person,
+    too_many_people,
+    lock
+):
     fields = rec.get("fields", {})
     firstname = fields.get(FIRSTNAME_FIELD)
     lastname = fields.get(LASTNAME_FIELD)
@@ -92,6 +104,12 @@ def download_worker(rec, workshop_map, dup_names, dup_addresses):
 
     if not firstname or not lastname or not attachments:
         return results
+
+    person_key = (
+        firstname.strip().lower(),
+        lastname.strip().lower(),
+        address.strip().lower()
+    )
 
     workshop_names = [workshop_map.get(wid, "") for wid in workshop_ids]
     workshop_text = ", ".join([w for w in workshop_names if w])
@@ -104,17 +122,31 @@ def download_worker(rec, workshop_map, dup_names, dup_addresses):
     fname_safe = re.sub(r"\s+", "-", firstname.strip())
     lname_safe = re.sub(r"\s+", "-", lastname.strip())
 
+    local_idx = 0  # per-submission numbering
+
     for att in attachments:
+        with lock:
+            if submitted_count_by_person[person_key] >= 3:
+                too_many_people.add(person_key)
+                break
+            submitted_count_by_person[person_key] += 1
+
+        local_idx += 1
+        idx = local_idx
+
         url = att.get("url")
-        filename = f"{fname_safe}_{lname_safe}.step"
+        if not url:
+            continue
+
+        filename = f"{fname_safe}_{lname_safe}_cutter{idx}.step"
         filepath = OUTPUT_DIR / filename
 
         try:
-            resp = requests.get(url)
+            resp = requests.get(url, timeout=30)
             resp.raise_for_status()
             with open(filepath, "wb") as fh:
                 fh.write(resp.content)
-        except:
+        except Exception:
             continue
 
         results.append({
@@ -124,8 +156,13 @@ def download_worker(rec, workshop_map, dup_names, dup_addresses):
             "workshop": workshop_text,
             "filename": filename,
             "filepath": filepath,
-            "dup": is_dup
+            "dup": is_dup,
+            "too_many": False
         })
+
+    if person_key in too_many_people:
+        for r in results:
+            r["too_many"] = True
 
     return results
 
@@ -152,15 +189,30 @@ def main():
         if a:
             dup_addresses.add(a.strip().lower())
 
+    submitted_count_by_person = defaultdict(int)
+    too_many_people = set()
+    lock = Lock()
+
     download_results = []
     with ThreadPoolExecutor(max_workers=8) as ex:
-        futures = [ex.submit(download_worker, rec, workshop_map, dup_names, dup_addresses)
-                   for rec in submissions]
+        futures = [
+            ex.submit(
+                download_worker,
+                rec,
+                workshop_map,
+                dup_names,
+                dup_addresses,
+                submitted_count_by_person,
+                too_many_people,
+                lock
+            )
+            for rec in submissions
+        ]
 
         for f in as_completed(futures):
             try:
                 download_results.extend(f.result())
-            except:
+            except Exception:
                 pass
 
     final_rows = []
@@ -190,7 +242,9 @@ def main():
             "FitsFlag": fits,
             "Fits 100mm³?": fits_label,
             "DuplicateFlag": item["dup"],
-            "Duplicate?": "YES" if item["dup"] else "NO"
+            "Duplicate?": "YES" if item["dup"] else "NO",
+            "TooManyFlag": item["too_many"],
+            "More than 3 Cutters?": "YES" if item["too_many"] else "NO"
         })
 
     wb = Workbook()
@@ -200,7 +254,7 @@ def main():
     headers = [
         "First Name", "Last Name", "Address", "Workshop",
         "Filename", "Size X (mm)", "Size Y (mm)", "Size Z (mm)",
-        "Fits 100mm³?", "Duplicate?"
+        "Fits 100mm³?", "Duplicate?", "More than 3 Cutters?"
     ]
     ws.append(headers)
 
@@ -213,12 +267,15 @@ def main():
         ws.append([
             r["First Name"], r["Last Name"], r["Address"], r["Workshop"],
             r["Filename"], r["Size X (mm)"], r["Size Y (mm)"], r["Size Z (mm)"],
-            r["Fits 100mm³?"], r["Duplicate?"]
+            r["Fits 100mm³?"], r["Duplicate?"], r["More than 3 Cutters?"]
         ])
 
         row = ws[row_index]
 
-        if r["DuplicateFlag"]:
+        if r["TooManyFlag"]:
+            for cell in row:
+                cell.fill = ORANGE_FILL
+        elif r["DuplicateFlag"]:
             for cell in row:
                 cell.fill = RED_FILL
         elif r["Fits 100mm³?"] == "ERROR":
