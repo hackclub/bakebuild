@@ -74,6 +74,12 @@ def _parse_step_file(path: str):
     return (float(bb.size.X), float(bb.size.Y), float(bb.size.Z))
 
 
+def is_step_file(filename: str) -> bool:
+    if not filename:
+        return False
+    return filename.lower().endswith((".step", ".stp"))
+
+
 def safe_step_dimensions(filepath, timeout=30):
     future = STEP_POOL.submit(_parse_step_file, str(filepath))
     try:
@@ -122,7 +128,7 @@ def download_worker(
     fname_safe = re.sub(r"\s+", "-", firstname.strip())
     lname_safe = re.sub(r"\s+", "-", lastname.strip())
 
-    local_idx = 0  # per-submission numbering
+    local_idx = 0
 
     for att in attachments:
         with lock:
@@ -135,10 +141,19 @@ def download_worker(
         idx = local_idx
 
         url = att.get("url")
+        original_name = att.get("filename", "")
+
         if not url:
             continue
 
-        filename = f"{fname_safe}_{lname_safe}_cutter{idx}.step"
+        valid_step = is_step_file(original_name)
+
+        if valid_step:
+            filename = f"{fname_safe}_{lname_safe}_cutter{idx}.step"
+        else:
+            ext = Path(original_name).suffix or ".invalid"
+            filename = f"{fname_safe}_{lname_safe}_cutter{idx}{ext}"
+
         filepath = OUTPUT_DIR / filename
 
         try:
@@ -157,7 +172,8 @@ def download_worker(
             "filename": filename,
             "filepath": filepath,
             "dup": is_dup,
-            "too_many": False
+            "too_many": False,
+            "invalid_file": not valid_step
         })
 
     if person_key in too_many_people:
@@ -221,14 +237,19 @@ def main():
         filename = item["filename"]
         filepath = item["filepath"]
 
-        try:
-            dx, dy, dz = safe_step_dimensions(filepath)
-            fits = dx <= LIMIT_MM and dy <= LIMIT_MM and dz <= LIMIT_MM
-            fits_label = "YES" if fits else "NO"
-        except Exception:
+        if item.get("invalid_file"):
             dx = dy = dz = None
             fits = False
-            fits_label = "ERROR"
+            fits_label = "INVALID"
+        else:
+            try:
+                dx, dy, dz = safe_step_dimensions(filepath)
+                fits = dx <= LIMIT_MM and dy <= LIMIT_MM and dz <= LIMIT_MM
+                fits_label = "YES" if fits else "NO"
+            except Exception:
+                dx = dy = dz = None
+                fits = False
+                fits_label = "ERROR"
 
         final_rows.append({
             "First Name": item["first"],
@@ -244,7 +265,9 @@ def main():
             "DuplicateFlag": item["dup"],
             "Duplicate?": "YES" if item["dup"] else "NO",
             "TooManyFlag": item["too_many"],
-            "More than 3 Cutters?": "YES" if item["too_many"] else "NO"
+            "More than 3 Cutters?": "YES" if item["too_many"] else "NO",
+            "InvalidFileFlag": item.get("invalid_file", False),
+            "Invalid File Type?": "YES" if item.get("invalid_file") else "NO"
         })
 
     wb = Workbook()
@@ -254,25 +277,31 @@ def main():
     headers = [
         "First Name", "Last Name", "Address", "Workshop",
         "Filename", "Size X (mm)", "Size Y (mm)", "Size Z (mm)",
-        "Fits 100mm³?", "Duplicate?", "More than 3 Cutters?"
+        "Fits 100mm³?", "Duplicate?", "More than 3 Cutters?",
+        "Invalid File Type?"
     ]
     ws.append(headers)
 
     RED_FILL = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
     YELLOW_FILL = PatternFill(start_color="FFEB9C", end_color="FFEB9C", fill_type="solid")
     ORANGE_FILL = PatternFill(start_color="F4B084", end_color="F4B084", fill_type="solid")
+    PURPLE_FILL = PatternFill(start_color="D9D2E9", end_color="D9D2E9", fill_type="solid")
 
     row_index = 2
     for r in final_rows:
         ws.append([
             r["First Name"], r["Last Name"], r["Address"], r["Workshop"],
             r["Filename"], r["Size X (mm)"], r["Size Y (mm)"], r["Size Z (mm)"],
-            r["Fits 100mm³?"], r["Duplicate?"], r["More than 3 Cutters?"]
+            r["Fits 100mm³?"], r["Duplicate?"], r["More than 3 Cutters?"],
+            r["Invalid File Type?"]
         ])
 
         row = ws[row_index]
 
-        if r["TooManyFlag"]:
+        if r["InvalidFileFlag"]:
+            for cell in row:
+                cell.fill = PURPLE_FILL
+        elif r["TooManyFlag"]:
             for cell in row:
                 cell.fill = ORANGE_FILL
         elif r["DuplicateFlag"]:
