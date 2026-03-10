@@ -29,7 +29,7 @@ WORKSHOP_FIELD = "Workshop"
 OUTPUT_DIR = Path("downloaded_step_files")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-LIMIT_MM = 100.0
+LIMIT_MM = 98.0
 HEADERS = {"Authorization": f"Bearer {AIRTABLE_API_KEY}"}
 
 STEP_POOL = ProcessPoolExecutor(max_workers=max(2, multiprocessing.cpu_count() - 1))
@@ -67,21 +67,25 @@ def fetch_airtable_table(table_id):
     return records
 
 
-def _parse_step_file(path: str):
-    from build123d import import_step
-    shape = import_step(path)
+def _parse_cad_file(path: str):
+    from build123d import import_step, import_stl
+    p = path.lower()
+    if p.endswith(".stl"):
+        shape = import_stl(path)
+    else:
+        shape = import_step(path)
     bb = shape.bounding_box()
     return (float(bb.size.X), float(bb.size.Y), float(bb.size.Z))
 
 
-def is_step_file(filename: str) -> bool:
+def is_cad_file(filename: str) -> bool:
     if not filename:
         return False
-    return filename.lower().endswith((".step", ".stp"))
+    return filename.lower().endswith((".step", ".stp", ".stl"))
 
 
 def safe_step_dimensions(filepath, timeout=30):
-    future = STEP_POOL.submit(_parse_step_file, str(filepath))
+    future = STEP_POOL.submit(_parse_cad_file, str(filepath))
     try:
         return future.result(timeout=timeout)
     except TimeoutError:
@@ -146,10 +150,13 @@ def download_worker(
         if not url:
             continue
 
-        valid_step = is_step_file(original_name)
+        valid_step = is_cad_file(original_name)
 
         if valid_step:
-            filename = f"{fname_safe}_{lname_safe}_cutter{idx}.step"
+            ext = Path(original_name).suffix.lower()
+            if ext not in (".step", ".stp", ".stl"):
+                ext = ".step"
+            filename = f"{fname_safe}_{lname_safe}_cutter{idx}{ext}"
         else:
             ext = Path(original_name).suffix or ".invalid"
             filename = f"{fname_safe}_{lname_safe}_cutter{idx}{ext}"
