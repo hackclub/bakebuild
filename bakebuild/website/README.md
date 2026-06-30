@@ -1,8 +1,11 @@
 # Bake Build Site
-This is a site for Hack Club's Bake Build ysws
+This is the website for Hack Club's BakeBuild ysws
 
 ### Tech stack
 React + Vite + TypeScript
+
+### Docs
+Docs for select maintaining processes are inside `docs/` directory
 
 ### Cloning and running locally
 I reccomend using pnpm because i used it.
