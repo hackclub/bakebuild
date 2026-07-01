@@ -19,6 +19,7 @@ export default function Layout() {
           >
             Home
           </a>
+
           <a
             className="text-right font-jaro bg-gray-900 py-1 px-2 text-xl"
             href="/gallery"
@@ -37,7 +38,7 @@ export default function Layout() {
         <Outlet />
       </main>
       {/*TODO: */}
-      <footer className="bg-black text-center justify-center text-white font-jaro text-md p-4 flex">
+      <footer className="bg-black items-center text-center not-md:flex-col gap-2 justify-center text-white font-jaro text-md p-4 flex">
         <span>
           Made by teens, for teens at{" "}
           <a className="underline text-sky-400" href="https://hackclub.com">
@@ -65,7 +66,6 @@ export default function Layout() {
             Slack.
           </a>
         </span>
-        <div className="border mx-1 border-white"></div>
         <a
           href="https://jams.hackclub.com/jam/bakebuild"
           className="underline text-sky-400"
@@ -73,6 +73,13 @@ export default function Layout() {
           {" "}
           Open Jam
         </a>
+        <span>|</span>
+        <span className="flex gap-2 items-center">
+          Site by{" "}
+          <a target="_blank" href="https://yehor.pl.eu.org">
+            <img src="https://button.yehor.pl.eu.org" />
+          </a>
+        </span>
       </footer>
     </div>
   );

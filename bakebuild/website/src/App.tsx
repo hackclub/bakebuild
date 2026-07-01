@@ -4,6 +4,7 @@ import Home from "@/pages/Home/Home";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import GalleryPage from "@/pages/Gallery/GalleryPage";
 import GuidePage from "@/pages/Guide/GuidePage";
+import FourohfourPage from "@/pages/FourOhFour/404Page";
 export function App() {
   return (
     <BrowserRouter>
@@ -11,6 +12,7 @@ export function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="*" element={<FourohfourPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/guide" element={<GuidePage />} />
           </Route>

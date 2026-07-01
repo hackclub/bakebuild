@@ -68,113 +68,177 @@ export default function Home() {
   return (
     <div className="flex-1">
       <section
-        className="relative text-white border-5 flex flex-col h-screen w-full justify-center overflow-hidden"
+        className=""
         // style={{
         //   backgroundImage: `url("https://i.ibb.co/5hxNqBK1/top-view-paper-texture.jpg")`,
         // }}
       >
-        <div className="flex flex-col justify-center items-center">
-          <img
-            src={cookie1}
-            className="absolute w-40 top-10 -right-10 cookie"
-            alt="Image of a chocolate chip cookie"
-          />
-          <img
-            src={cookie1}
-            className="absolute w-60 bottom-10 -left-20 cookie2"
-            alt="Image of a chocolate chip cookie"
-          />
-          <img
-            src={cookie2}
-            className="absolute w-50 top-20 -left-20 cookie2"
-            alt="Image of a chocolate chip cookie"
-          />
-          <img
-            src={cookie2}
-            className="absolute w-50 bottom-19 -right-20 cookie"
-            alt="Image of a chocolate chip cookie"
-          />
-          {/*<img src="src/assets/cut.webp" className="w-250" />*/}
-          <h1 className="relative z-5 text-[30vw] lg:text-[280px] xl:text-[30vh] -mt-10 font-jaro uppercase inline-flex flex-col w-fit leading-none">
+        <div className="relative text-white border-5 flex flex-col h-screen w-full justify-center overflow-hidden">
+          {/*<div className="absolute right-0 top-0 h-full w-10 flex items-center justify-center z-100">
+            <span className="font-jaro text-sm md:text-lg xl:text-xl rotate-90 whitespace-nowrap opacity-50 ">
+              YSWS by{" "}
+              <a
+                className="underline"
+                href="https://hackclub.enterprise.slack.com/team/U085US8GYG6"
+              >
+                Shaan
+              </a>
+              , sponsored by{" "}
+              <a
+                className="underline"
+                href="https://hackclub.enterprise.slack.com/team/U07HEH4N8UV"
+              >
+                Jared
+              </a>
+            </span>
+          </div>*/}
+          <div className="flex flex-col justify-center items-center">
             <img
-              fetchPriority="low"
-              src={stars}
-              className="absolute invisible sm:visible -top-12 -left-10 -translate-x-1/2 w-100 pointer-events-none"
-              alt="Stars"
-            />
-            <img
-              fetchPriority="low"
-              src={stars}
-              className="absolute invisible sm:visible -bottom-12 -right-10 translate-x-1/2 rotate-180 w-100 pointer-events-none"
-              alt="Stars"
-            />
-            <div className="flex flex-col gap-30">
-              <span className="txtshdw z-50 flex w-full text-shadow-accent justify-between">
-                <span>B</span>
-                <span>A</span>
-                <span>K</span>
-                <span>E</span>
-              </span>
-
-              <span className="txtshdw z-50">BUILD</span>
-            </div>
-            <img
-              src={sticker}
-              className="absolute w-75 sm:w-[55vw] lg:w-125 xl:w-[50vh]  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              src={cookie1}
+              className="absolute w-40 top-10 -right-10 cookie"
               alt="Image of a chocolate chip cookie"
             />
-          </h1>
+            <img
+              src={cookie1}
+              className="absolute w-60 bottom-10 -left-20 cookie2"
+              alt="Image of a chocolate chip cookie"
+            />
+            <img
+              src={cookie2}
+              className="absolute w-50 top-20 -left-20 cookie2"
+              alt="Image of a chocolate chip cookie"
+            />
+            <img
+              src={cookie2}
+              className="absolute w-50 bottom-19 -right-20 cookie"
+              alt="Image of a chocolate chip cookie"
+            />
+            {/*<img src="src/assets/cut.webp" className="w-250" />*/}
+            <h1 className="relative z-5 text-[17vh] xl:text-[25vh] mt-[-10vh] font-jaro uppercase inline-flex flex-col w-fit leading-none">
+              <img
+                fetchPriority="low"
+                src={stars}
+                className="absolute invisible sm:visible -top-12 -left-10 -translate-x-1/2 w-100 pointer-events-none"
+                alt="Stars"
+              />
+              <img
+                fetchPriority="low"
+                src={stars}
+                className="absolute invisible sm:visible -bottom-12 -right-10 translate-x-1/2 rotate-180 w-100 pointer-events-none"
+                alt="Stars"
+              />
+              <div className="flex flex-col gap-30">
+                <span className="txtshdw z-50 flex w-full text-shadow-accent justify-between">
+                  <span>B</span>
+                  <span>A</span>
+                  <span>K</span>
+                  <span>E</span>
+                </span>
 
-          <span className="txtstroke2 px-5 lg:px-5 text-md text-center z-50 sm:text-2xl lg:text-3xl font-slackey">
-            Make your own cookie cutter and get it shipped to you!
-          </span>
-          <div className="flex gap-3 z-100 mt-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a
-                  href="#make-it"
-                  className="underline border-2 px-5 py-2 text-xl rounded-xl font-milkyway"
-                >
-                  Make It
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>Learn how to make it</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a
-                  href="#bake-it"
-                  className="underline group border-2 border-dashed px-5 py-2 text-xl rounded-xl font-milkyway"
-                >
-                  Bake It
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <span>Ship your project!</span>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-        <div className="belt-container absolute bottom-0">
-          <div className="belt-track">
-            <div className="belt-group">
+                <span className="txtshdw z-50">BUILD</span>
+              </div>
               <img
-                className="belt-image h-[10vh]"
-                src={belt}
-                alt="moving belt"
+                src={sticker}
+                className="absolute
+                           w-[min(42vw,600px)]
+                           left-1/2 top-1/2
+                           -translate-x-1/2 -translate-y-1/2
+                           pointer-events-none"
+                alt="Image of a chocolate chip cookie"
               />
-              <img
-                className="belt-image h-[10vh]"
-                src={belt}
-                alt="moving belt"
-              />
+            </h1>
+
+            <span className="txtstroke2 px-5 lg:px-5 text-md text-center z-50 sm:text-2xl lg:text-3xl font-slackey">
+              Make your own cookie cutter and get it shipped to you!
+            </span>
+            <div className="flex gap-3 z-100 mt-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="#make-it"
+                    className="underline border-2 px-5 py-2 text-xl rounded-xl font-milkyway"
+                  >
+                    Make It
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>Learn how to make it</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="#bake-it"
+                    className="underline group border-2 border-dashed px-5 py-2 text-xl rounded-xl font-milkyway"
+                  >
+                    Bake It
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span>Ship your project!</span>
+                </TooltipContent>
+              </Tooltip>
             </div>
-            <div className="belt-group" aria-hidden="true">
-              <img
-                className="belt-image h-[10vh]"
-                src={belt}
-                alt="moving belt"
-              />
+          </div>
+          <div className="belt-container absolute bottom-0">
+            <div className="flex justify-center opacity-70">
+              <span className="font-jaro text-sm md:text-md">
+                Currently run by{" "}
+                <a
+                  className="underline"
+                  href="https://hackclub.enterprise.slack.com/team/U085US8GYG6"
+                >
+                  Shaan
+                </a>
+                , sponsored by{" "}
+                <a
+                  className="underline"
+                  href="https://hackclub.enterprise.slack.com/team/U07HEH4N8UV"
+                >
+                  Jared
+                </a>
+                ; With help from{" "}
+                <a
+                  href="https://hackclub.enterprise.slack.com/team/U07E4196AMA"
+                  className="underline"
+                >
+                  Souptik Samanta
+                </a>
+                ,{" "}
+                <a
+                  href="https://hackclub.enterprise.slack.com/team/U07HY92M9GA"
+                  className="underline"
+                >
+                  Kayla
+                </a>
+                ,{" "}
+                <a
+                  href="https://hackclub.enterprise.slack.com/team/U07PXU0657B"
+                  className="underline"
+                >
+                  Kate
+                </a>
+              </span>
+            </div>
+
+            <div className="belt-track">
+              <div className="belt-group">
+                <img
+                  className="belt-image h-[10vh]"
+                  src={belt}
+                  alt="moving belt"
+                />
+                <img
+                  className="belt-image h-[10vh]"
+                  src={belt}
+                  alt="moving belt"
+                />
+              </div>
+              <div className="belt-group" aria-hidden="true">
+                <img
+                  className="belt-image h-[10vh]"
+                  src={belt}
+                  alt="moving belt"
+                />
+              </div>
             </div>
           </div>
         </div>
