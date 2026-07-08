@@ -374,7 +374,7 @@ export default function GuidePage() {
                   <li>
                     <a
                       className="underline"
-                      href="http://hack.club/submit-bakebuild"
+                      href="https://forms.hackclub.com/t/cecBQMan6Jus"
                     >
                       Or alternatively click me
                     </a>

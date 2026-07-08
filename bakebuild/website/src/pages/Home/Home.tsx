@@ -338,7 +338,7 @@ export default function Home() {
             house from Hack Club hq
           </p>
           <div className="text-xl mt-5 text-center font-slackey underline">
-            <a href="https://hack.club/submit-bakebuild">
+            <a href="https://forms.hackclub.com/t/cecBQMan6Jus">
               Submit your project here
             </a>
           </div>
@@ -391,14 +391,14 @@ export default function Home() {
               </div>
               {/*<a
                 className="underline"
-                href="http://hack.club/bakebuild-workshop"
+                href="https://forms.hackclub.com/t/4PZPHrJacMus"
               >
                 Open the tutorial & submission form &#40;click&#41;.
               </a>{" "}*/}
               <br />
             </p>
             <a
-              href="http://hack.club/bakebuild-workshop"
+              href="https://forms.hackclub.com/t/4PZPHrJacMus"
               className=" border-4 p-2 w-fit font-slackey hover:cursor-pointer underline"
             >
               Open workshop form
